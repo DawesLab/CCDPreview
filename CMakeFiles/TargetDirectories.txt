@@ -1,0 +1,1 @@
+/home/photon/code/CCDPreview/CMakeFiles/CCDPreview.dir

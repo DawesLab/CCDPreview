@@ -204,11 +204,12 @@ int main(int ac, char* av[])
 
     const string specwin = "Spectrum";
     namedWindow( specwin, WINDOW_NORMAL);
-    resizeWindow( specwin, 800, 200);
+    resizeWindow( specwin, 1000, 300);
 
     const string imwin = "Raw Image";
     namedWindow( imwin, WINDOW_NORMAL);
-    resizeWindow( imwin, 800, 200);
+    resizeWindow( imwin, 1000, 300);
+
 
 
     bool go = true;
@@ -227,27 +228,29 @@ int main(int ac, char* av[])
 	    Mat planes[] = {Mat_<float>(padded), Mat::zeros(padded.size(), CV_32F)};
 	    Mat complexI;
 
-	    merge(planes, 2, complexI);         // Add to the expanded another plane with zeros
+	    merge(planes, 2, complexI);  // Add to the expanded another plane with zeros
 
-	    dft(complexI, complexI, DFT_ROWS);            // this way the result may fit in the source matrix
+	    dft(complexI, complexI, DFT_ROWS);   // this way the result may fit in the source matrix
 
-	    // compute the magnitude and switch to logarithmic scale
-	    // => log(1 + sqrt(Re(DFT(I))^2 + Im(DFT(I))^2))
-	    split(complexI, planes);                   // planes[0] = Re(DFT(I), planes[1] = Im(DFT(I))
-	    //magnitude(planes[0], planes[1], planes[0]);// planes[0] = magnitude
+	    split(complexI, planes);   // planes[0] = Re(DFT(I), planes[1] = Im(DFT(I))
+
 	    Mat realI = planes[0];
 	    Mat imagI = planes[1];
 
-	    //Mat magI = Mat::zeros(padded.size(), CV_32F);
-	    //magI += Scalar::all(1);                    // switch to logarithmic scale
-	    //log(magI, magI);
+	    Mat magI = Mat::zeros(padded.size(), CV_32F);
+        magnitude(realI, imagI, magI);
 
 	    // crop the spectrum, if it has an odd number of rows or columns
 	    realI = realI(Rect(0, 0, realI.cols & -2, realI.rows & -2));
 	    imagI = imagI(Rect(0, 0, imagI.cols & -2, imagI.rows & -2));
-     
+
+        std::cout << magI.rowRange(Range(200,201));
+
+        log(magI,magI);
+        normalize(magI, magI, 0, 1, CV_MINMAX);
+
         imshow(imwin, image);
-        imshow(specwin, realI);
+        imshow(specwin, magI);
         if (waitKey(20) >= 0) { 
             go = false;
         }

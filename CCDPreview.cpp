@@ -238,16 +238,16 @@ int main(int ac, char* av[])
 	    Mat realI = planes[0];
 	    Mat imagI = planes[1];
 
-	    Mat magI = Mat::zeros(padded.size(), CV_32F);
-	    magI += Scalar::all(1);                    // switch to logarithmic scale
-	    log(magI, magI);
+	    //Mat magI = Mat::zeros(padded.size(), CV_32F);
+	    //magI += Scalar::all(1);                    // switch to logarithmic scale
+	    //log(magI, magI);
 
 	    // crop the spectrum, if it has an odd number of rows or columns
 	    realI = realI(Rect(0, 0, realI.cols & -2, realI.rows & -2));
 	    imagI = imagI(Rect(0, 0, imagI.cols & -2, imagI.rows & -2));
      
-        imshow(imwin, image)
-        imshow(specwin, magI);
+        imshow(imwin, image);
+        imshow(specwin, realI);
         if (waitKey(20) >= 0) { 
             go = false;
         }

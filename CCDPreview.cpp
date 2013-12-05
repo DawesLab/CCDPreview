@@ -71,7 +71,7 @@ PicamHandle InitializeCamera (PicamCameraID id, PicamAvailableData data, PicamAc
     	std::cout << "Opening camera...\n";
 
     const pichar* string;
-
+    // TODO open camera by ID so we don't have to search for them!!!
     if( Picam_OpenFirstCamera( &camera ) == PicamError_None )
         Picam_GetCameraID( camera, &id );
     else
@@ -244,7 +244,7 @@ int main(int ac, char* av[])
 	    realI = realI(Rect(0, 0, realI.cols & -2, realI.rows & -2));
 	    imagI = imagI(Rect(0, 0, imagI.cols & -2, imagI.rows & -2));
 
-        std::cout << magI.rowRange(Range(200,201));
+        //std::cout << magI.rowRange(Range(200,201));
 
         log(magI,magI);
         normalize(magI, magI, 0, 1, CV_MINMAX);
